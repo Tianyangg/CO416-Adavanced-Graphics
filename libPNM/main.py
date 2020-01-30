@@ -86,6 +86,25 @@ def xyz2sphere(vec, h, w):
 
     return int(phi/(2*np.pi)*w), int(theta/np.pi*h)
 
+def gamma_correction(input, gamma, stop, output):
+    """
+    Perform gamma gamma_correction
+    """
+    # load the pmf image (mirror ball one)
+    image = loadPFM(input)
+    h, w, channel = image.shape
+
+    process_image = np.empty(shape=(h, w, channel), dtype = np.float32)
+    process_image = np.multiply(image, stop)
+
+    process_image = np.power(process_image, 1/gamma)
+
+    process_image[process_image > 1] = 1
+    process_image = np.ceil(np.multiply(process_image, 255))
+
+    writePPM(output, process_image.astype(np.uint8))
+
+
 def generate_map(input, out):
     """
     load a lat long file, pixel index it to another file with 511*511
@@ -123,5 +142,5 @@ if '__main__' == __name__:
     # LoadAndSavePPM('9.ppm', 'test.ppm')
     # LoadPFMAndSavePPM('test.pfm', 'grace.ppm')
     # LoadPPMAndSavePFM('test.ppm', '9.pfm')
-    generate_map('/Users/tianyangsun/Documents/Imperial_S2/Advanced_graphics/CO417-Assignment1/UrbanProbe/urbanEM_latlong.pfm', "/Users/tianyangsun/Documents/Imperial_S2/Advanced_graphics/CO417-Assignment1/UrbanProbe/result2.pfm")
-    pass
+    # generate_map('/Users/tianyangsun/Documents/Imperial_S2/Advanced_graphics/CO417-Assignment1/UrbanProbe/urbanEM_latlong.pfm', "/Users/tianyangsun/Documents/Imperial_S2/Advanced_graphics/CO417-Assignment1/UrbanProbe/result2.pfm")
+    gamma_correction('../UrbanProbe/result2.pfm', 1.4, 3, '../UrbanProbe/result2AfterGamma.pfm' )
