@@ -104,6 +104,13 @@ def gamma_correction(input, gamma, stop, output):
 
     writePPM(output, process_image.astype(np.uint8))
 
+def gamma_bulk():
+    stops = [1, 2, 3, 4, 5]
+    gamma = [0.5, 0.75, 1, 1.3, 1.5, 1.7, 2, 2.3, 2.5, 3]
+    for s in stops:
+        for g in gamma:
+            gamma_correction('../UrbanProbe/result2.pfm', g, s, '../UrbanProbe/result2g' + str(g) + "stop" + str(s) + '.pfm')
+
 
 def generate_map(input, out):
     """
@@ -143,4 +150,4 @@ if '__main__' == __name__:
     # LoadPFMAndSavePPM('test.pfm', 'grace.ppm')
     # LoadPPMAndSavePFM('test.ppm', '9.pfm')
     # generate_map('/Users/tianyangsun/Documents/Imperial_S2/Advanced_graphics/CO417-Assignment1/UrbanProbe/urbanEM_latlong.pfm', "/Users/tianyangsun/Documents/Imperial_S2/Advanced_graphics/CO417-Assignment1/UrbanProbe/result2.pfm")
-    gamma_correction('../UrbanProbe/result2.pfm', 1.4, 3, '../UrbanProbe/result2AfterGamma.pfm' )
+    gamma_bulk()
